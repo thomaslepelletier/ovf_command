@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>OVF command</title>
+
+  <style type="text/css" media="screen">
+    body {font-family:verdana, sans-serif; color:#666; background:#fafafa; padding:20px; text-align:center;}
+    #page {text-align:left; max-width:600px; margin:0 auto;}
+    h1 {font-size:16px; font-weight:normal; text-align:center;}
+    label {font-size:16px;}
+    label i {font-style:normal; display:inline-block; text-align:right; width:100px;}
+    label textarea {vertical-align:top;}
+    button {margin-left:105px; padding:5px; margin-top:5px; font-size:16px;}
+    input, textarea {width:400px; font-size:16px; font-family: courier, "courier new", monospace; margin:0 0 5px 0; padding:5px; border:1px solid #eee;}
+    select {margin:0 0 5px 0;}
+    @media (min-width:300px) and (max-width: 768px)
+    {
+      input, textarea {width:100%;}
+      label i {display:block; width:auto; text-align:left;}
+      button {display:block; margin:0;}
+    }
+  </style>
+
+  <script type="text/javascript">
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+                dd='0'+dd
+              }
+
+    if(mm<10) {
+                mm='0'+mm
+              }
+
+    today = yyyy+'-'+mm+'-'+dd;
+
+    function saveFormAsTextFile()
+        {
+        var textToSave = 'ovftool --noSSLVerify --acceptAllEulas --skipManifestCheck --X:injectOvfEnv --powerOn "--net:' + document.getElementById('source_network').value +
+        '=' + document.getElementById('destination_network').value +
+        '" --datastore=' + document.getElementById('datastore').value +
+        ' --diskMode=' + document.getElementById('disk_mode').value +
+        ' --name=' + document.getElementById('vm_name').value +
+        '--prop:proxy_name=' + document.getElementById('proxy_name').value +
+        ' --prop:gateway=' + document.getElementById('gateway').value +
+        ' --prop:ipaddress=' + document.getElementById('ipaddress').value +
+        ' --prop:netmask=' + document.getElementById('netmask').value +
+        ' --prop:domain=' + document.getElementById('domain').value +
+        ' --prop:dns1=' + document.getElementById('primary_dns').value +
+        ' --prop:dns2=' + document.getElementById('secondary_dns').value +
+        ' --prop:global_proxy=' + document.getElementById('global_proxy').value +
+        ' --prop:client_network="' + document.getElementById('client_network').value + '"'
+        ' --prop:global_smtp_relay=' + document.getElementById('global_smtp_relay').value +
+        ' D:\RP\ITEC-REVERSEPROXY.ovf "vi://' + document.getElementById('username').value +
+        '@' + document.getElementById('ip_host').value +
+        ':443/' + document.getElementById('datacenter').value +
+        '/host' + document.getElementById('cluster_name').value + '"';
+
+
+        var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+        var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+        var fileNameToSaveAs = document.getElementById("filename").value;
+
+        var downloadLink = document.createElement("a");
+        downloadLink.download = fileNameToSaveAs;
+        downloadLink.innerHTML = "Download file";
+        downloadLink.href = textToSaveAsURL;
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+
+        downloadLink.click();
+        }
+
+    function destroyClickedElement(event)
+        {
+        document.body.removeChild(event.target);
+        }
+  </script>
+</head>
+
+<body>
+  <div id="page">
+
+    <h1>OVF command</h1>
+
+    <label for="source_network">
+      <i>Source newtork</i>
+      <input id="source_network" size="40">
+    </label>
+
+    <br>
+
+    <label for="destination_network">
+      <i>Destination network</i>
+      <input id="destination_network" size="40">
+    </label>
+
+    <br>
+
+    <label for="datastore">
+      <i>Datastore</i>
+      <input id="datastore" size="40">
+    </label>
+
+    <br>
+
+    <label for="disk_mode">
+      <i>Disk mode</i>
+      <input id="disk_mode" size="40">
+    </label>
+
+    <br>
+
+    <label for="vm_name">
+      <i>VM name</i>
+      <input id="vm_name" size="40">
+    </label>
+
+    <br>
+
+    <label for="proxy_name">
+      <i>Hostname</i>
+      <input id="proxy_name" size="40">
+    </label>
+
+    <br>
+
+    <label for="gateway">
+      <i>Gateway</i>
+      <input id="gateway" size="40">
+    </label>
+
+    <label for="ipaddress">
+      <i>IP</i>
+      <input id="ipaddress" size="40">
+    </label>
+
+    <br>
+
+    <label for="netmask">
+      <i>Netmask</i>
+      <input id="netmask" size="40">
+    </label>
+
+    <br>
+
+    <label for="domain">
+      <i>Domain</i>
+      <input id="domain" size="40">
+    </label>
+
+    <br>
+
+    <label for="primary_dns">
+      <i>Primary DNS</i>
+      <input id="primary_dns" size="40">
+    </label>
+
+    <br>
+
+    <label for="secondary_dns">
+      <i>Secondary DNS</i>
+      <input id="secondary_dns" size="40">
+    </label>
+
+    <br>
+
+    <label for="global_proxy">
+      <i>Global Proxy</i>
+      <input id="global_proxy" size="40">
+    </label>
+
+    <br>
+
+    <label for="client_network">
+      <i>Client network</i>
+      <input id="client_network" size="40">
+    </label>
+
+    <br>
+
+    <label for="global_smtp_relay">
+      <i>Global SMTP</i>
+      <input id="global_smtp_relay" size="40">
+    </label>
+
+    <br>
+
+    <label for="username">
+      <i>Username</i>
+      <input id="username" size="40">
+    </label>
+
+    <br>
+
+    <label for="ip_host">
+      <i>IP host</i>
+      <input id="ip_host" size="40">
+    </label>
+
+    <br>
+
+    <label for="datacenter">
+      <i>Datacenter</i>
+      <input id="datacenter" size="40">
+    </label>
+
+    <br>
+
+    <label for="cluster_name">
+      <i>Cluster name</i>
+      <input id="cluster_name" size="40">
+    </label>
+
+    <br>
+
+    <label for="filename">
+      <i>Filename</i>
+      <input id="filename" value="" size="40" placeholder="File name">
+    </label>
+
+    <button onclick="saveFormAsTextFile()">
+      Download configuration
+    </button>
+
+    <!-- Pfff ! Je pensais que t’étais beaucoup plus fort que ça Batman ! -->
+
+  </div>
+</body>
+</html>
